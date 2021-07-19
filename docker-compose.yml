@@ -1,0 +1,62 @@
+version: '3'
+services:
+  #  fitness_node:
+  #    image: node:latest
+  #    container_name: fitness_node
+  #    ports:
+  #      - 3000:8080
+  #    volumes:
+  #      - .:/usr/src/app
+  #    networks:
+  #      - default
+  node_php:
+    build:
+      context: ./docker/php/
+      dockerfile: Dockerfile
+    image: chat_php
+    container_name: chat_php
+    tty: true
+    volumes:
+      - ./DBExtend
+    working_dir: /usr/src/app
+
+    ports:
+      - 8000:8000
+  node_mysql:
+    image: mysql:5.7.24
+    container_name: chat_mysql
+    tty: true
+    restart: always
+    volumes:
+      - /home/oneal/mysql/data:/var/lib/mysql
+      - /home/oneal/mysql/data/export:/var/lib/mysql-files
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_ROOT_PASSWORD: thisisnotyourpasswd0824
+      MYSQL_DATABASE: chat
+    ports:
+      - 3307:3306
+  node_phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: chat_phpmyadmin
+    links:
+      - chat_mysql:3307
+    environment:
+      PMA_HOST: chat_mysql
+      PMA_USER: root
+      PMA_PASSWORD: thisisnotyourpasswd0824
+      PMA_DATABASE: chat
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 7010:80
+  node_redis:
+    image: redis
+    container_name: chat_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+    - /home/oneal/redis/data:/data
+    command: redis-server --appendonly yes --requirepass thisisnotyourpasswd

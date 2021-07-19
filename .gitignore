@@ -1,0 +1,17 @@
+/node_modules
+/.env
+/src/logs/
+/src/sessions
+/sessions
+/src/config/config
+/DBExtend/laravel/.env
+/script/.idea
+.idea*
+.env.pretest
+/dist
+
+/src/**/*.js
+/src/*.js
+/src/public/apk/*
+
+#/test-area/**/*.js
